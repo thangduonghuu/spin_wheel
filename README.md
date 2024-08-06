@@ -1,4 +1,4 @@
-<h1 align="center">React Custom Roulette</h1>
+<!-- <h1 align="center">React Custom Roulette</h1>
 
 <div align="center">
 
@@ -224,4 +224,4 @@ This project exists thanks to all the people who contribute!
 
 ## License
 
-This project is licensed under the MIT license, Copyright (c) 2023 <a href="https://effectussoftware.com">Effectus Software</a>. [[License](LICENSE)]
+This project is licensed under the MIT license, Copyright (c) 2023 <a href="https://effectussoftware.com">Effectus Software</a>. [[License](LICENSE)] -->
