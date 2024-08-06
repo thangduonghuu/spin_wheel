@@ -1,336 +1,355 @@
 import React, { createRef, RefObject, useEffect } from 'react';
-import { WheelCanvasStyle } from './styles';
-import { WheelData } from '../Wheel/types';
 import { clamp, getQuantity } from '../../utils';
+import { WheelData } from '../Wheel/types';
+import { WheelCanvasStyle } from './styles';
 
 interface WheelCanvasProps extends DrawWheelProps {
-    width: string;
-    height: string;
-    data: WheelData[];
+  width: string;
+  height: string;
+  data: WheelData[];
 }
 
 interface DrawWheelProps {
-    outerBorderColor: string;
-    outerBorderWidth: number;
-    innerRadius: number;
-    innerBorderColor: string;
-    innerBorderWidth: number;
-    radiusLineColor: string;
-    radiusLineWidth: number;
-    fontFamily: string;
-    fontWeight: number | string;
-    fontSize: number;
-    fontStyle: string;
-    perpendicularText: boolean;
-    prizeMap: number[][];
-    rouletteUpdater: boolean;
-    textDistance: number;
+  outerBorderColor: string;
+  outerBorderWidth: number;
+  innerRadius: number;
+  innerBorderColor: string;
+  innerBorderWidth: number;
+  radiusLineColor: string;
+  radiusLineWidth: number;
+  fontFamily: string;
+  fontWeight: number | string;
+  fontSize: number;
+  fontStyle: string;
+  perpendicularText: boolean;
+  prizeMap: number[][];
+  rouletteUpdater: boolean;
+  textDistance: number;
 }
 
 const drawRadialBorder = (
-    ctx: CanvasRenderingContext2D,
-    centerX: number,
-    centerY: number,
-    insideRadius: number,
-    outsideRadius: number,
-    angle: number,
+  ctx: CanvasRenderingContext2D,
+  centerX: number,
+  centerY: number,
+  insideRadius: number,
+  outsideRadius: number,
+  angle: number,
 ) => {
-    ctx.beginPath();
-    ctx.moveTo(
-        centerX + (insideRadius + 1) * Math.cos(angle),
-        centerY + (insideRadius + 1) * Math.sin(angle),
-    );
-    ctx.lineTo(
-        centerX + (outsideRadius - 1) * Math.cos(angle),
-        centerY + (outsideRadius - 1) * Math.sin(angle),
-    );
-    ctx.closePath();
-    ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(
+    centerX + (insideRadius + 1) * Math.cos(angle),
+    centerY + (insideRadius + 1) * Math.sin(angle),
+  );
+  ctx.lineTo(
+    centerX + (outsideRadius - 1) * Math.cos(angle),
+    centerY + (outsideRadius - 1) * Math.sin(angle),
+  );
+  ctx.closePath();
+  ctx.stroke();
 };
 
 const drawWheel = (
-    canvasRef: RefObject<HTMLCanvasElement>,
-    data: WheelData[],
-    drawWheelProps: DrawWheelProps,
-    showImage = false,
+  canvasRef: RefObject<HTMLCanvasElement>,
+  data: WheelData[],
+  drawWheelProps: DrawWheelProps,
+  showImage = false,
 ) => {
-    /* eslint-disable prefer-const */
-    let {
-        outerBorderColor,
-        outerBorderWidth,
-        innerRadius,
-        innerBorderColor,
-        innerBorderWidth,
-        radiusLineColor,
-        radiusLineWidth,
-        fontFamily,
-        fontWeight,
-        fontSize,
-        fontStyle,
-        perpendicularText,
-        prizeMap,
-        textDistance,
-    } = drawWheelProps;
+  /* eslint-disable prefer-const */
+  let {
+    outerBorderColor,
+    outerBorderWidth,
+    innerRadius,
+    innerBorderColor,
+    innerBorderWidth,
+    radiusLineColor,
+    radiusLineWidth,
+    fontFamily,
+    fontWeight,
+    fontSize,
+    fontStyle,
+    perpendicularText,
+    prizeMap,
+    textDistance,
+  } = drawWheelProps;
 
-    const QUANTITY = getQuantity(prizeMap);
+  const QUANTITY = getQuantity(prizeMap);
 
-    outerBorderWidth *= 2;
-    innerBorderWidth *= 2;
-    radiusLineWidth *= 2;
+  outerBorderWidth *= 2;
+  innerBorderWidth *= 2;
+  radiusLineWidth *= 2;
 
-    const canvas = canvasRef.current;
-    if (canvas?.getContext('2d')) {
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        ctx.clearRect(0, 0, 500, 500);
-        ctx.strokeStyle = 'transparent';
-        ctx.lineWidth = 0;
+  const canvas = canvasRef.current;
+  if (canvas?.getContext('2d')) {
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    ctx.clearRect(0, 0, 500, 500);
+    ctx.strokeStyle = 'transparent';
+    ctx.lineWidth = 0;
 
-        let startAngle = 0;
-        const outsideRadius = canvas.width / 2 - 10;
+    let startAngle = 0;
+    const outsideRadius = canvas.width / 2 - 10;
 
-        const clampedContentDistance = clamp(0, 100, textDistance);
-        const contentRadius = (outsideRadius * clampedContentDistance) / 100;
+    const clampedContentDistance = clamp(0, 100, textDistance);
+    const contentRadius = (outsideRadius * clampedContentDistance) / 100;
 
-        const clampedInsideRadius = clamp(0, 100, innerRadius);
-        const insideRadius = (outsideRadius * clampedInsideRadius) / 100;
+    const clampedInsideRadius = clamp(0, 100, innerRadius);
+    const insideRadius = (outsideRadius * clampedInsideRadius) / 100;
 
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-        for (let i = 0; i < data.length; i++) {
-            const { optionSize, style } = data[i];
+    for (let i = 0; i < data.length; i++) {
+      const { optionSize, style } = data[i];
 
-            const arc =
-                (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
-            const endAngle = startAngle + arc;
+      const arc =
+        (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
+      const endAngle = startAngle + arc;
 
-            ctx.fillStyle = (style && style.backgroundColor) as string;
+      ctx.fillStyle = (style && style.backgroundColor) as string;
 
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, outsideRadius, startAngle, endAngle, false);
-            ctx.arc(centerX, centerY, insideRadius, endAngle, startAngle, true);
-            ctx.stroke();
-            ctx.fill();
-            ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, outsideRadius, startAngle, endAngle, false);
+      ctx.arc(centerX, centerY, insideRadius, endAngle, startAngle, true);
+      ctx.stroke();
+      ctx.fill();
+      ctx.save();
 
-            // WHEEL RADIUS LINES
-            ctx.strokeStyle = radiusLineWidth <= 0 ? 'transparent' : radiusLineColor;
-            ctx.lineWidth = radiusLineWidth;
-            drawRadialBorder(ctx, centerX, centerY, insideRadius, outsideRadius, startAngle);
-            if (i === data.length - 1) {
-                drawRadialBorder(ctx, centerX, centerY, insideRadius, outsideRadius, endAngle);
-            }
+      // WHEEL RADIUS LINES
+      ctx.strokeStyle = radiusLineWidth <= 0 ? 'transparent' : radiusLineColor;
+      ctx.lineWidth = radiusLineWidth;
+      drawRadialBorder(ctx, centerX, centerY, insideRadius, outsideRadius, startAngle);
+      if (i === data.length - 1) {
+        drawRadialBorder(ctx, centerX, centerY, insideRadius, outsideRadius, endAngle);
+      }
 
-            // WHEEL OUTER BORDER
-            ctx.strokeStyle = outerBorderWidth <= 0 ? 'transparent' : outerBorderColor;
-            ctx.lineWidth = outerBorderWidth;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, outsideRadius - ctx.lineWidth / 2, 0, 2 * Math.PI);
-            ctx.closePath();
-            ctx.stroke();
+      // WHEEL OUTER BORDER
+      ctx.strokeStyle = outerBorderWidth <= 0 ? 'transparent' : outerBorderColor;
+      ctx.lineWidth = outerBorderWidth;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, outsideRadius - ctx.lineWidth / 2, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.stroke();
 
-            // WHEEL INNER BORDER
-            ctx.strokeStyle = innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
-            ctx.lineWidth = innerBorderWidth;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, insideRadius + ctx.lineWidth / 2 - 1, 0, 2 * Math.PI);
-            ctx.closePath();
-            ctx.stroke();
+      // WHEEL INNER BORDER
+      ctx.strokeStyle = innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
+      ctx.lineWidth = innerBorderWidth;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, insideRadius + ctx.lineWidth / 2 - 1, 0, 2 * Math.PI);
+      ctx.closePath();
+      ctx.stroke();
 
-            // CONTENT FILL
-            ctx.translate(
-                centerX + Math.cos(startAngle + arc / 2) * contentRadius,
-                centerY + Math.sin(startAngle + arc / 2) * contentRadius,
-            );
-            let contentRotationAngle = startAngle + arc / 2;
+      // CONTENT FILL
+      ctx.translate(
+        centerX + Math.cos(startAngle + arc / 2) * contentRadius,
+        centerY + Math.sin(startAngle + arc / 2) * contentRadius,
+      );
+      let contentRotationAngle = startAngle + arc / 2;
 
-            if (data[i].image && showImage) {
-                // CASE IMAGE
-                contentRotationAngle +=
-                    data[i].image && !data[i].image?.landscape ? Math.PI / 2 : 0;
-                ctx.rotate(contentRotationAngle + 15);
+      if (data[i].image && showImage) {
+        // CASE IMAGE
+        contentRotationAngle +=
+          data[i].image && !data[i].image?.landscape ? Math.PI / 2 : 0;
+        ctx.rotate(contentRotationAngle + 15);
 
-                const img = data[i].image?._imageHTML || new Image();
-                ctx.drawImage(
-                    img,
-                    (img.width + (data[i].image?.offsetX || 0)) / -2,
-                    -(
-                        img.height -
-                        (data[i].image?.landscape ? 0 : 90) + // offsetY correction for non landscape images
-                        (data[i].image?.offsetY || 0)
-                    ) / 2,
-                    img.width,
-                    img.height,
-                );
-            }
+        const img = data[i].image?._imageHTML || new Image();
+        ctx.drawImage(
+          img,
+          (img.width + (data[i].image?.offsetX || 0)) / -2,
+          -(
+            img.height -
+            (data[i].image?.landscape ? 0 : 90) + // offsetY correction for non landscape images
+            (data[i].image?.offsetY || 0)
+          ) / 2,
+          img.width,
+          img.height,
+        );
+      }
 
-            if (data[i].option) {
-                // CASE TEXT
-                contentRotationAngle += perpendicularText ? Math.PI / 2 : 0;
-                ctx.rotate(contentRotationAngle);
+      if (data[i].option) {
+        // CASE TEXT
+        contentRotationAngle += perpendicularText ? Math.PI / 2 : 0;
+        ctx.rotate(contentRotationAngle);
 
-                const text = data[i].option;
-                ctx.font = `${style?.fontStyle || fontStyle} ${style?.fontWeight || fontWeight} ${
-                    (style?.fontSize || fontSize) * 2
-                }px ${style?.fontFamily || fontFamily}, Helvetica, Arial`;
-                ctx.fillStyle = (style && style.textColor) as string;
-                ctx.fillText(text || '', -ctx.measureText(text || '').width, fontSize / 2.7);
-            }
+        const text = data[i].option;
+        ctx.font = `${style?.fontStyle || fontStyle} ${style?.fontWeight || fontWeight} ${(style?.fontSize || fontSize) * 2
+          }px ${style?.fontFamily || fontFamily}, Helvetica, Arial`;
+        ctx.fillStyle = (style && style.textColor) as string;
+        ctx.fillText(text || '', -ctx.measureText(text || '').width, fontSize / 2.7);
+      }
 
-            ctx.restore();
+      ctx.restore();
 
-            startAngle = endAngle;
-        }
+      startAngle = endAngle;
     }
+  }
 };
 
 const drawWheelImage = (
-    canvasRef: RefObject<HTMLCanvasElement>,
-    data: WheelData[],
-    drawWheelProps: DrawWheelProps,
-    showImage = false,
+  canvasRef: RefObject<HTMLCanvasElement>,
+  data: WheelData[],
+  drawWheelProps: DrawWheelProps,
+  showImage = false,
 ) => {
-    /* eslint-disable prefer-const */
-    let {
-        outerBorderColor,
-        outerBorderWidth,
-        innerRadius,
-        innerBorderColor,
-        innerBorderWidth,
-        radiusLineColor,
-        radiusLineWidth,
-        fontFamily,
-        fontWeight,
-        fontSize,
-        fontStyle,
-        perpendicularText,
-        prizeMap,
-        textDistance,
-    } = drawWheelProps;
+  /* eslint-disable prefer-const */
+  let {
+    // outerBorderColor,
+    outerBorderWidth,
+    innerRadius,
+    // innerBorderColor,
+    innerBorderWidth,
+    // radiusLineColor,
+    radiusLineWidth,
+    // fontFamily,
+    // fontWeight,
+    // fontSize,
+    // fontStyle,
+    // perpendicularText,
+    prizeMap,
+    textDistance,
+  } = drawWheelProps;
 
-    const QUANTITY = getQuantity(prizeMap);
+  const QUANTITY = getQuantity(prizeMap);
 
-    outerBorderWidth *= 2;
-    innerBorderWidth *= 2;
-    radiusLineWidth *= 2;
+  outerBorderWidth *= 2;
+  innerBorderWidth *= 2;
+  radiusLineWidth *= 2;
 
-    const canvas = canvasRef.current;
-    if (canvas?.getContext('2d')) {
-        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-        ctx.clearRect(0, 0, 700, 700);
-        ctx.strokeStyle = 'transparent';
-        ctx.lineWidth = 0;
+  const canvas = canvasRef.current;
+  if (canvas?.getContext('2d')) {
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    ctx.clearRect(0, 0, 700, 700);
+    ctx.strokeStyle = 'transparent';
+    ctx.lineWidth = 0;
 
-        let startAngle = 0;
-        const outsideRadius = canvas.width / 2 - 10;
+    let startAngle = 0;
+    const outsideRadius = canvas.width / 2 - 10;
 
-        const clampedContentDistance = clamp(0, 100, textDistance);
-        const contentRadius = (outsideRadius * clampedContentDistance) / 100;
+    const clampedContentDistance = clamp(0, 100, textDistance);
+    const contentRadius = (outsideRadius * clampedContentDistance) / 100;
 
-        const clampedInsideRadius = clamp(0, 100, innerRadius);
-        const insideRadius = (outsideRadius * clampedInsideRadius) / 100;
+    const clampedInsideRadius = clamp(0, 100, innerRadius);
+    const insideRadius = (outsideRadius * clampedInsideRadius) / 100;
 
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
 
-        for (let i = 0; i < data.length; i++) {
-            const { optionSize, style } = data[i];
+    for (let i = 0; i < data.length; i++) {
+      const { optionSize, style } = data[i];
 
-            const arc =
-                (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
-            const endAngle = startAngle + arc;
+      const arc =
+        (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
+      const endAngle = startAngle + arc;
 
-            ctx.fillStyle = (style && style.backgroundColor) as string;
+      ctx.fillStyle = (style && style.backgroundColor) as string;
 
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, outsideRadius, startAngle, endAngle, false);
-            ctx.arc(centerX, centerY, insideRadius, endAngle, startAngle, true);
-            ctx.stroke();
-            ctx.fill();
-            ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, outsideRadius, startAngle, endAngle, false);
+      ctx.arc(centerX, centerY, insideRadius, endAngle, startAngle, true);
+      ctx.stroke();
+      ctx.fill();
+      ctx.save();
 
-            // ctx.strokeStyle = radiusLineWidth <= 0 ? 'transparent' : radiusLineColor;
-            // ctx.lineWidth = radiusLineWidth;
-            // drawRadialBorder(
-            //   ctx,
-            //   centerX,
-            //   centerY,
-            //   insideRadius,
-            //   outsideRadius,
-            //   startAngle
-            // );
-            // if (i === data.length - 1) {
-            //   drawRadialBorder(
-            //     ctx,
-            //     centerX,
-            //     centerY,
-            //     insideRadius,
-            //     outsideRadius,
-            //     endAngle
-            //   );
-            // }
+      // ctx.strokeStyle = radiusLineWidth <= 0 ? 'transparent' : radiusLineColor;
+      // ctx.lineWidth = radiusLineWidth;
+      // drawRadialBorder(
+      //   ctx,
+      //   centerX,
+      //   centerY,
+      //   insideRadius,
+      //   outsideRadius,
+      //   startAngle
+      // );
+      // if (i === data.length - 1) {
+      //   drawRadialBorder(
+      //     ctx,
+      //     centerX,
+      //     centerY,
+      //     insideRadius,
+      //     outsideRadius,
+      //     endAngle
+      //   );
+      // }
 
-            // WHEEL OUTER BORDER
-            // ctx.strokeStyle =
-            //   outerBorderWidth <= 0 ? 'transparent' : outerBorderColor;
-            // ctx.lineWidth = outerBorderWidth;
-            // ctx.beginPath();
-            // ctx.arc(
-            //   centerX,
-            //   centerY,
-            //   outsideRadius - ctx.lineWidth / 2,
-            //   0,
-            //   2 * Math.PI
-            // );
-            // ctx.closePath();
-            // ctx.stroke();
+      // WHEEL OUTER BORDER
+      // ctx.strokeStyle =
+      //   outerBorderWidth <= 0 ? 'transparent' : outerBorderColor;
+      // ctx.lineWidth = outerBorderWidth;
+      // ctx.beginPath();
+      // ctx.arc(
+      //   centerX,
+      //   centerY,
+      //   outsideRadius - ctx.lineWidth / 2,
+      //   0,
+      //   2 * Math.PI
+      // );
+      // ctx.closePath();
+      // ctx.stroke();
 
-            // WHEEL INNER BORDER
-            // ctx.strokeStyle =
-            //   innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
-            // ctx.lineWidth = innerBorderWidth;
-            // ctx.beginPath();
-            // ctx.arc(
-            //   centerX,
-            //   centerY,
-            //   insideRadius + ctx.lineWidth / 2 - 1,
-            //   0,
-            //   2 * Math.PI
-            // );
-            // ctx.closePath();
-            // ctx.stroke();
+      // WHEEL INNER BORDER
+      // ctx.strokeStyle =
+      //   innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
+      // ctx.lineWidth = innerBorderWidth;
+      // ctx.beginPath();
+      // ctx.arc(
+      //   centerX,
+      //   centerY,
+      //   insideRadius + ctx.lineWidth / 2 - 1,
+      //   0,
+      //   2 * Math.PI
+      // );
+      // ctx.closePath();
+      // ctx.stroke();
 
-            // CONTENT FILL
-            ctx.translate(
-                centerX + Math.cos(startAngle + arc / 2) * contentRadius,
-                centerY + Math.sin(startAngle + arc / 2) * contentRadius,
-            );
-            let contentRotationAngle = startAngle + arc / 2;
+      // CONTENT FILL
+      ctx.translate(
+        centerX + Math.cos(startAngle + arc / 2) * contentRadius,
+        centerY + Math.sin(startAngle + arc / 2) * contentRadius,
+      );
+      let contentRotationAngle = startAngle + arc / 2;
 
-            if (data[i].image && showImage) {
-                // CASE IMAGE
-                contentRotationAngle +=
-                    data[i].image && !data[i].image?.landscape ? Math.PI / 2 : 0;
+      if (data[i].image && showImage) {
+        // CASE IMAGE
+        contentRotationAngle +=
+          data[i].image && !data[i].image?.landscape ? Math.PI / 2 : 0;
 
-                console.log('contentRotationAngle image', contentRotationAngle);
-                ctx.rotate(contentRotationAngle);
-                // console.log(contentRotationAngle)
-                const img = data[i].image?._imageHTML || new Image();
+        console.log('contentRotationAngle image', contentRotationAngle);
+        ctx.rotate(contentRotationAngle);
+        // console.log(contentRotationAngle)
+        const img = data[i].image?._imageHTML || new Image();
 
-                ctx.drawImage(img, (70 + (data[i].image?.offsetX || 0)) / -2, -100, 70, 70);
-            }
+        ctx.drawImage(img, (70 + (data[i].image?.offsetX || 0)) / -2, -100, 70, 70);
+      }
 
-            ctx.restore();
+      ctx.restore();
 
-            startAngle = endAngle;
-        }
+      startAngle = endAngle;
     }
+  }
 };
 
 const WheelCanvas = ({
-    width,
-    height,
-    data,
+  width,
+  height,
+  data,
+  outerBorderColor,
+  outerBorderWidth,
+  innerRadius,
+  innerBorderColor,
+  innerBorderWidth,
+  radiusLineColor,
+  radiusLineWidth,
+  fontFamily,
+  fontWeight,
+  fontSize,
+  fontStyle,
+  perpendicularText,
+  prizeMap,
+  rouletteUpdater,
+  textDistance,
+}: WheelCanvasProps): JSX.Element => {
+  const canvasRef = createRef<HTMLCanvasElement>();
+  const canvasImageRef = createRef<HTMLCanvasElement>();
+
+  const drawWheelProps = {
     outerBorderColor,
     outerBorderWidth,
     innerRadius,
@@ -346,39 +365,19 @@ const WheelCanvas = ({
     prizeMap,
     rouletteUpdater,
     textDistance,
-}: WheelCanvasProps): JSX.Element => {
-    const canvasRef = createRef<HTMLCanvasElement>();
-    const canvasImageRef = createRef<HTMLCanvasElement>();
+  };
 
-    const drawWheelProps = {
-        outerBorderColor,
-        outerBorderWidth,
-        innerRadius,
-        innerBorderColor,
-        innerBorderWidth,
-        radiusLineColor,
-        radiusLineWidth,
-        fontFamily,
-        fontWeight,
-        fontSize,
-        fontStyle,
-        perpendicularText,
-        prizeMap,
-        rouletteUpdater,
-        textDistance,
-    };
+  useEffect(() => {
+    drawWheel(canvasRef, data, drawWheelProps);
+    drawWheelImage(canvasImageRef, data, drawWheelProps, true);
+  }, [canvasRef, data, drawWheelProps, rouletteUpdater]);
 
-    useEffect(() => {
-        drawWheel(canvasRef, data, drawWheelProps);
-        drawWheelImage(canvasImageRef, data, drawWheelProps, true);
-    }, [canvasRef, data, drawWheelProps, rouletteUpdater]);
-
-    return (
-        <div className="relative w-full h-full">
-            <WheelCanvasStyle ref={canvasRef} width={width} height={height} />
-            <WheelCanvasStyle ref={canvasImageRef} width={width} height={height} />
-        </div>
-    );
+  return (
+    <div className="relative w-full h-full">
+      <WheelCanvasStyle ref={canvasRef} width={width} height={height} />
+      <WheelCanvasStyle ref={canvasImageRef} width={width} height={height} />
+    </div>
+  );
 };
 
 export default WheelCanvas;

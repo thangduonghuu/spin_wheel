@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: TS6133
 import React, { useEffect, useRef, useState } from 'react';
 import WebFont from 'webfontloader';
 
