@@ -1,7 +1,7 @@
 import React, { createRef, RefObject, useEffect } from 'react';
 import { clamp, getQuantity } from '../../utils';
 import { WheelData } from '../Wheel/types';
-import { WheelCanvasStyle } from './styles';
+import { WheelCanvasStyle, WheelCanvasTextStyle } from './styles';
 
 interface WheelCanvasProps extends DrawWheelProps {
     width: string;
@@ -375,7 +375,7 @@ const WheelCanvas = ({
 
     return (
         <div className="relative w-full h-full">
-            <WheelCanvasStyle ref={canvasRef} width={width} height={height} />
+            <WheelCanvasTextStyle ref={canvasRef} width={width} height={height} />
             <WheelCanvasStyle ref={canvasImageRef} width={width} height={height} />
         </div>
     );

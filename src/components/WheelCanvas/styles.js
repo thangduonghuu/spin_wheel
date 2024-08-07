@@ -7,3 +7,12 @@ export const WheelCanvasStyle = styled.canvas`
     top: 0;
     height: 100%;
 `;
+
+export const WheelCanvasTextStyle = styled.canvas`
+    width: 100%;
+    position: absolute;
+    left: 0;
+    z-index: 1;
+    top: 0;
+    height: 100%;
+`;
