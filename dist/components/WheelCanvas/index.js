@@ -1,6 +1,6 @@
 import React, { createRef, useEffect } from 'react';
 import { clamp, getQuantity } from '../../utils';
-import { WheelCanvasStyle } from './styles';
+import { WheelCanvasStyle, WheelCanvasTextStyle } from './styles';
 var drawRadialBorder = function (ctx, centerX, centerY, insideRadius, outsideRadius, angle) {
     ctx.beginPath();
     ctx.moveTo(centerX + (insideRadius + 1) * Math.cos(angle), centerY + (insideRadius + 1) * Math.sin(angle));
@@ -228,7 +228,7 @@ var WheelCanvas = function (_a) {
         drawWheelImage(canvasImageRef, data, drawWheelProps, true);
     }, [canvasRef, data, drawWheelProps, rouletteUpdater]);
     return (React.createElement("div", { className: "relative w-full h-full" },
-        React.createElement(WheelCanvasStyle, { ref: canvasRef, width: width, height: height }),
+        React.createElement(WheelCanvasTextStyle, { ref: canvasRef, width: width, height: height }),
         React.createElement(WheelCanvasStyle, { ref: canvasImageRef, width: width, height: height })));
 };
 export default WheelCanvas;
