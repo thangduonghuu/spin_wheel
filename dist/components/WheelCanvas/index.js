@@ -94,7 +94,7 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
                 ctx.fillStyle = (style && style.textColor);
                 ctx.translate(0, -ctx.measureText('Good').width / 2.5);
                 ctx.rotate((-90 * Math.PI) / 180);
-                ctx.fillText('Good', -ctx.measureText('Good').width, 60);
+                ctx.fillText('Good', -ctx.measureText('Good').width, 55);
                 ctx.fillText('Luck', -ctx.measureText('Luck').width - 10, 100);
             }
             ctx.restore();
