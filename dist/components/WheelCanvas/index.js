@@ -1,6 +1,7 @@
 import React, { createRef, useEffect } from 'react';
 import { clamp, getQuantity } from '../../utils';
 import { WheelCanvasStyle, WheelCanvasTextStyle } from './styles';
+import { GOOD_LUCK_TEXT } from '../../strings';
 var drawRadialBorder = function (ctx, centerX, centerY, insideRadius, outsideRadius, angle) {
     ctx.beginPath();
     ctx.moveTo(centerX + (insideRadius + 1) * Math.cos(angle), centerY + (insideRadius + 1) * Math.sin(angle));
@@ -60,7 +61,7 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
             ctx.strokeStyle = innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
             ctx.lineWidth = innerBorderWidth;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, insideRadius + ctx.lineWidth / 2 - 1, 0, 2 * Math.PI);
+            // ctx.arc(centerX, centerY, insideRadius + ctx.lineWidth / 2 - 1, 0, 2 * Math.PI);
             ctx.closePath();
             ctx.stroke();
             // CONTENT FILL
@@ -70,20 +71,31 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
                 // CASE IMAGE
                 contentRotationAngle +=
                     data[i].image && !((_a = data[i].image) === null || _a === void 0 ? void 0 : _a.landscape) ? Math.PI / 2 : 0;
-                ctx.rotate(contentRotationAngle + 15);
                 var img = ((_b = data[i].image) === null || _b === void 0 ? void 0 : _b._imageHTML) || new Image();
                 ctx.drawImage(img, (img.width + (((_c = data[i].image) === null || _c === void 0 ? void 0 : _c.offsetX) || 0)) / -2, -(img.height -
                     (((_d = data[i].image) === null || _d === void 0 ? void 0 : _d.landscape) ? 0 : 90) + // offsetY correction for non landscape images
                     (((_e = data[i].image) === null || _e === void 0 ? void 0 : _e.offsetY) || 0)) / 2, img.width, img.height);
             }
-            if (data[i].option) {
+            if (data[i].option && data[i].option !== GOOD_LUCK_TEXT) {
                 // CASE TEXT
                 contentRotationAngle += perpendicularText ? Math.PI / 2 : 0;
                 ctx.rotate(contentRotationAngle);
                 var text = data[i].option;
                 ctx.font = "".concat((style === null || style === void 0 ? void 0 : style.fontStyle) || fontStyle, " ").concat((style === null || style === void 0 ? void 0 : style.fontWeight) || fontWeight, " ").concat(((style === null || style === void 0 ? void 0 : style.fontSize) || fontSize) * 2, "px ").concat((style === null || style === void 0 ? void 0 : style.fontFamily) || fontFamily, ", Helvetica, Arial");
                 ctx.fillStyle = (style && style.textColor);
-                ctx.fillText(text || '', -ctx.measureText(text || '').width, fontSize / 2.7);
+                ctx.translate(0, -ctx.measureText(text || '').width / 2.5);
+                ctx.rotate((-90 * Math.PI) / 180);
+                ctx.fillText(text || '', -ctx.measureText(text || '').width, 100);
+            }
+            if (data[i].option && data[i].option === GOOD_LUCK_TEXT) {
+                contentRotationAngle += perpendicularText ? Math.PI / 2 : 0;
+                ctx.rotate(contentRotationAngle);
+                ctx.font = "".concat((style === null || style === void 0 ? void 0 : style.fontStyle) || fontStyle, " ").concat((style === null || style === void 0 ? void 0 : style.fontWeight) || fontWeight, " ").concat(((style === null || style === void 0 ? void 0 : style.fontSize) || fontSize) * 2, "px ").concat((style === null || style === void 0 ? void 0 : style.fontFamily) || fontFamily, ", Helvetica, Arial");
+                ctx.fillStyle = (style && style.textColor);
+                ctx.translate(0, -ctx.measureText('Good').width / 2.5);
+                ctx.rotate((-90 * Math.PI) / 180);
+                ctx.fillText('Good', -ctx.measureText('Good').width, 60);
+                ctx.fillText('Luck', -ctx.measureText('Luck').width - 10, 100);
             }
             ctx.restore();
             startAngle = endAngle;
@@ -126,10 +138,10 @@ var drawWheelImage = function (canvasRef, data, drawWheelProps, showImage) {
         var centerX = canvas.width / 2;
         var centerY = canvas.height / 2;
         for (var i = 0; i < data.length; i++) {
-            var _d = data[i], optionSize = _d.optionSize, style = _d.style;
+            var optionSize = data[i].optionSize;
             var arc = (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
             var endAngle = startAngle + arc;
-            ctx.fillStyle = (style && style.backgroundColor);
+            ctx.fillStyle = 'transparent';
             ctx.beginPath();
             ctx.arc(centerX, centerY, outsideRadius, startAngle, endAngle, false);
             ctx.arc(centerX, centerY, insideRadius, endAngle, startAngle, true);
@@ -187,15 +199,14 @@ var drawWheelImage = function (canvasRef, data, drawWheelProps, showImage) {
             // CONTENT FILL
             ctx.translate(centerX + Math.cos(startAngle + arc / 2) * contentRadius, centerY + Math.sin(startAngle + arc / 2) * contentRadius);
             var contentRotationAngle = startAngle + arc / 2;
-            if (data[i].image && showImage) {
+            if (data[i].image && showImage && data[i].option !== GOOD_LUCK_TEXT) {
                 // CASE IMAGE
                 contentRotationAngle +=
                     data[i].image && !((_a = data[i].image) === null || _a === void 0 ? void 0 : _a.landscape) ? Math.PI / 2 : 0;
-                console.log('contentRotationAngle image', contentRotationAngle);
                 ctx.rotate(contentRotationAngle);
-                // console.log(contentRotationAngle)
+                ctx.translate(10, -20);
                 var img = ((_b = data[i].image) === null || _b === void 0 ? void 0 : _b._imageHTML) || new Image();
-                ctx.drawImage(img, (70 + (((_c = data[i].image) === null || _c === void 0 ? void 0 : _c.offsetX) || 0)) / -2, -100, 70, 70);
+                ctx.drawImage(img, (70 + (((_c = data[i].image) === null || _c === void 0 ? void 0 : _c.offsetX) || 0)) / -2, -20, 70, 70);
             }
             ctx.restore();
             startAngle = endAngle;

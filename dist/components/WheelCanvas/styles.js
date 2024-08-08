@@ -3,6 +3,6 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 import styled from 'styled-components';
-export var WheelCanvasStyle = styled.canvas(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    top: 0;\n    height: 100%;\n"], ["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    top: 0;\n    height: 100%;\n"])));
-export var WheelCanvasTextStyle = styled.canvas(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    z-index: 1;\n    top: 0;\n    height: 100%;\n"], ["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    z-index: 1;\n    top: 0;\n    height: 100%;\n"])));
+export var WheelCanvasStyle = styled.canvas(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    top: 0;\n    z-index: 3;\n    height: 100%;\n"], ["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    top: 0;\n    z-index: 3;\n    height: 100%;\n"])));
+export var WheelCanvasTextStyle = styled.canvas(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    z-index: 3;\n    top: 0;\n    height: 100%;\n"], ["\n    width: 100%;\n    position: absolute;\n    left: 0;\n    z-index: 3;\n    top: 0;\n    height: 100%;\n"])));
 var templateObject_1, templateObject_2;

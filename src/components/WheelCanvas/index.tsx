@@ -252,7 +252,7 @@ const drawWheelImage = (
         const centerY = canvas.height / 2;
 
         for (let i = 0; i < data.length; i++) {
-            const { optionSize, style } = data[i];
+            const { optionSize } = data[i];
 
             const arc =
                 (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
