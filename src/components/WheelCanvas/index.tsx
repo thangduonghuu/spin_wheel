@@ -2,6 +2,7 @@ import React, { createRef, RefObject, useEffect } from 'react';
 import { clamp, getQuantity } from '../../utils';
 import { WheelData } from '../Wheel/types';
 import { WheelCanvasStyle, WheelCanvasTextStyle } from './styles';
+import { GOOD_LUCK_TEXT } from '../../strings';
 
 interface WheelCanvasProps extends DrawWheelProps {
     width: string;
@@ -133,7 +134,7 @@ const drawWheel = (
             ctx.strokeStyle = innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
             ctx.lineWidth = innerBorderWidth;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, insideRadius + ctx.lineWidth / 2 - 1, 0, 2 * Math.PI);
+            // ctx.arc(centerX, centerY, insideRadius + ctx.lineWidth / 2 - 1, 0, 2 * Math.PI);
             ctx.closePath();
             ctx.stroke();
 
@@ -148,7 +149,6 @@ const drawWheel = (
                 // CASE IMAGE
                 contentRotationAngle +=
                     data[i].image && !data[i].image?.landscape ? Math.PI / 2 : 0;
-                ctx.rotate(contentRotationAngle + 15);
 
                 const img = data[i].image?._imageHTML || new Image();
                 ctx.drawImage(
@@ -164,7 +164,7 @@ const drawWheel = (
                 );
             }
 
-            if (data[i].option) {
+            if (data[i].option && data[i].option !== GOOD_LUCK_TEXT) {
                 // CASE TEXT
                 contentRotationAngle += perpendicularText ? Math.PI / 2 : 0;
                 ctx.rotate(contentRotationAngle);
@@ -174,7 +174,25 @@ const drawWheel = (
                     (style?.fontSize || fontSize) * 2
                 }px ${style?.fontFamily || fontFamily}, Helvetica, Arial`;
                 ctx.fillStyle = (style && style.textColor) as string;
-                ctx.fillText(text || '', -ctx.measureText(text || '').width, fontSize / 2.7);
+                ctx.translate(0, -ctx.measureText(text || '').width / 2.5);
+                ctx.rotate((-90 * Math.PI) / 180);
+
+                ctx.fillText(text || '', -ctx.measureText(text || '').width, 100);
+            }
+
+            if (data[i].option && data[i].option === GOOD_LUCK_TEXT) {
+                contentRotationAngle += perpendicularText ? Math.PI / 2 : 0;
+                ctx.rotate(contentRotationAngle);
+
+                ctx.font = `${style?.fontStyle || fontStyle} ${style?.fontWeight || fontWeight} ${
+                    (style?.fontSize || fontSize) * 2
+                }px ${style?.fontFamily || fontFamily}, Helvetica, Arial`;
+                ctx.fillStyle = (style && style.textColor) as string;
+                ctx.translate(0, -ctx.measureText('Good').width / 2.5);
+                ctx.rotate((-90 * Math.PI) / 180);
+
+                ctx.fillText('Good', -ctx.measureText('Good').width, 60);
+                ctx.fillText('Luck', -ctx.measureText('Luck').width - 10, 100);
             }
 
             ctx.restore();
@@ -240,7 +258,7 @@ const drawWheelImage = (
                 (optionSize && (optionSize * (2 * Math.PI)) / QUANTITY) || (2 * Math.PI) / QUANTITY;
             const endAngle = startAngle + arc;
 
-            ctx.fillStyle = (style && style.backgroundColor) as string;
+            ctx.fillStyle = 'transparent';
 
             ctx.beginPath();
             ctx.arc(centerX, centerY, outsideRadius, startAngle, endAngle, false);
@@ -307,17 +325,16 @@ const drawWheelImage = (
             );
             let contentRotationAngle = startAngle + arc / 2;
 
-            if (data[i].image && showImage) {
+            if (data[i].image && showImage && data[i].option !== GOOD_LUCK_TEXT) {
                 // CASE IMAGE
                 contentRotationAngle +=
                     data[i].image && !data[i].image?.landscape ? Math.PI / 2 : 0;
 
-                console.log('contentRotationAngle image', contentRotationAngle);
                 ctx.rotate(contentRotationAngle);
-                // console.log(contentRotationAngle)
+                ctx.translate(10, -20);
                 const img = data[i].image?._imageHTML || new Image();
 
-                ctx.drawImage(img, (70 + (data[i].image?.offsetX || 0)) / -2, -100, 70, 70);
+                ctx.drawImage(img, (70 + (data[i].image?.offsetX || 0)) / -2, -20, 70, 70);
             }
 
             ctx.restore();
