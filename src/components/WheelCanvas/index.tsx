@@ -174,7 +174,7 @@ const drawWheel = (
                     (style?.fontSize || fontSize) * 2
                 }px ${style?.fontFamily || fontFamily}, Helvetica, Arial`;
                 ctx.fillStyle = (style && style.textColor) as string;
-                ctx.translate(0, -ctx.measureText(text || '').width / 2.5);
+                ctx.translate(0, -ctx.measureText(text || '').width / 2);
                 ctx.rotate((-90 * Math.PI) / 180);
 
                 ctx.fillText(text || '', -ctx.measureText(text || '').width, 100);
@@ -188,7 +188,7 @@ const drawWheel = (
                     (style?.fontSize || fontSize) * 2
                 }px ${style?.fontFamily || fontFamily}, Helvetica, Arial`;
                 ctx.fillStyle = (style && style.textColor) as string;
-                ctx.translate(0, -ctx.measureText('Good').width / 2.5);
+                ctx.translate(0, -ctx.measureText('Good').width / 2);
                 ctx.rotate((-90 * Math.PI) / 180);
 
                 ctx.fillText('Good', -ctx.measureText('Good').width, 55);

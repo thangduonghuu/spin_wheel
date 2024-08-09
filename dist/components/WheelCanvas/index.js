@@ -83,7 +83,7 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
                 var text = data[i].option;
                 ctx.font = "".concat((style === null || style === void 0 ? void 0 : style.fontStyle) || fontStyle, " ").concat((style === null || style === void 0 ? void 0 : style.fontWeight) || fontWeight, " ").concat(((style === null || style === void 0 ? void 0 : style.fontSize) || fontSize) * 2, "px ").concat((style === null || style === void 0 ? void 0 : style.fontFamily) || fontFamily, ", Helvetica, Arial");
                 ctx.fillStyle = (style && style.textColor);
-                ctx.translate(0, -ctx.measureText(text || '').width / 2.5);
+                ctx.translate(0, -ctx.measureText(text || '').width / 2);
                 ctx.rotate((-90 * Math.PI) / 180);
                 ctx.fillText(text || '', -ctx.measureText(text || '').width, 100);
             }
@@ -92,7 +92,7 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
                 ctx.rotate(contentRotationAngle);
                 ctx.font = "".concat((style === null || style === void 0 ? void 0 : style.fontStyle) || fontStyle, " ").concat((style === null || style === void 0 ? void 0 : style.fontWeight) || fontWeight, " ").concat(((style === null || style === void 0 ? void 0 : style.fontSize) || fontSize) * 2, "px ").concat((style === null || style === void 0 ? void 0 : style.fontFamily) || fontFamily, ", Helvetica, Arial");
                 ctx.fillStyle = (style && style.textColor);
-                ctx.translate(0, -ctx.measureText('Good').width / 2.5);
+                ctx.translate(0, -ctx.measureText('Good').width / 2);
                 ctx.rotate((-90 * Math.PI) / 180);
                 ctx.fillText('Good', -ctx.measureText('Good').width, 55);
                 ctx.fillText('Luck', -ctx.measureText('Luck').width - 10, 100);
