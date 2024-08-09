@@ -267,57 +267,6 @@ const drawWheelImage = (
             ctx.fill();
             ctx.save();
 
-            // ctx.strokeStyle = radiusLineWidth <= 0 ? 'transparent' : radiusLineColor;
-            // ctx.lineWidth = radiusLineWidth;
-            // drawRadialBorder(
-            //   ctx,
-            //   centerX,
-            //   centerY,
-            //   insideRadius,
-            //   outsideRadius,
-            //   startAngle
-            // );
-            // if (i === data.length - 1) {
-            //   drawRadialBorder(
-            //     ctx,
-            //     centerX,
-            //     centerY,
-            //     insideRadius,
-            //     outsideRadius,
-            //     endAngle
-            //   );
-            // }
-
-            // WHEEL OUTER BORDER
-            // ctx.strokeStyle =
-            //   outerBorderWidth <= 0 ? 'transparent' : outerBorderColor;
-            // ctx.lineWidth = outerBorderWidth;
-            // ctx.beginPath();
-            // ctx.arc(
-            //   centerX,
-            //   centerY,
-            //   outsideRadius - ctx.lineWidth / 2,
-            //   0,
-            //   2 * Math.PI
-            // );
-            // ctx.closePath();
-            // ctx.stroke();
-
-            // WHEEL INNER BORDER
-            // ctx.strokeStyle =
-            //   innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
-            // ctx.lineWidth = innerBorderWidth;
-            // ctx.beginPath();
-            // ctx.arc(
-            //   centerX,
-            //   centerY,
-            //   insideRadius + ctx.lineWidth / 2 - 1,
-            //   0,
-            //   2 * Math.PI
-            // );
-            // ctx.closePath();
-            // ctx.stroke();
-
             // CONTENT FILL
             ctx.translate(
                 centerX + Math.cos(startAngle + arc / 2) * contentRadius,

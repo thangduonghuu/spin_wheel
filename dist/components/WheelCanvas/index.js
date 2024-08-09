@@ -83,7 +83,7 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
                 var text = data[i].option;
                 ctx.font = "".concat((style === null || style === void 0 ? void 0 : style.fontStyle) || fontStyle, " ").concat((style === null || style === void 0 ? void 0 : style.fontWeight) || fontWeight, " ").concat(((style === null || style === void 0 ? void 0 : style.fontSize) || fontSize) * 2, "px ").concat((style === null || style === void 0 ? void 0 : style.fontFamily) || fontFamily, ", Helvetica, Arial");
                 ctx.fillStyle = (style && style.textColor);
-                ctx.translate(0, -ctx.measureText(text || '').width / 2.5);
+                ctx.translate(0, -ctx.measureText(text || '').width / 2);
                 ctx.rotate((-90 * Math.PI) / 180);
                 ctx.fillText(text || '', -ctx.measureText(text || '').width, 100);
             }
@@ -92,7 +92,7 @@ var drawWheel = function (canvasRef, data, drawWheelProps, showImage) {
                 ctx.rotate(contentRotationAngle);
                 ctx.font = "".concat((style === null || style === void 0 ? void 0 : style.fontStyle) || fontStyle, " ").concat((style === null || style === void 0 ? void 0 : style.fontWeight) || fontWeight, " ").concat(((style === null || style === void 0 ? void 0 : style.fontSize) || fontSize) * 2, "px ").concat((style === null || style === void 0 ? void 0 : style.fontFamily) || fontFamily, ", Helvetica, Arial");
                 ctx.fillStyle = (style && style.textColor);
-                ctx.translate(0, -ctx.measureText('Good').width / 2.5);
+                ctx.translate(0, -ctx.measureText('Good').width / 2);
                 ctx.rotate((-90 * Math.PI) / 180);
                 ctx.fillText('Good', -ctx.measureText('Good').width, 55);
                 ctx.fillText('Luck', -ctx.measureText('Luck').width - 10, 100);
@@ -148,54 +148,6 @@ var drawWheelImage = function (canvasRef, data, drawWheelProps, showImage) {
             ctx.stroke();
             ctx.fill();
             ctx.save();
-            // ctx.strokeStyle = radiusLineWidth <= 0 ? 'transparent' : radiusLineColor;
-            // ctx.lineWidth = radiusLineWidth;
-            // drawRadialBorder(
-            //   ctx,
-            //   centerX,
-            //   centerY,
-            //   insideRadius,
-            //   outsideRadius,
-            //   startAngle
-            // );
-            // if (i === data.length - 1) {
-            //   drawRadialBorder(
-            //     ctx,
-            //     centerX,
-            //     centerY,
-            //     insideRadius,
-            //     outsideRadius,
-            //     endAngle
-            //   );
-            // }
-            // WHEEL OUTER BORDER
-            // ctx.strokeStyle =
-            //   outerBorderWidth <= 0 ? 'transparent' : outerBorderColor;
-            // ctx.lineWidth = outerBorderWidth;
-            // ctx.beginPath();
-            // ctx.arc(
-            //   centerX,
-            //   centerY,
-            //   outsideRadius - ctx.lineWidth / 2,
-            //   0,
-            //   2 * Math.PI
-            // );
-            // ctx.closePath();
-            // ctx.stroke();
-            // WHEEL INNER BORDER
-            // ctx.strokeStyle =
-            //   innerBorderWidth <= 0 ? 'transparent' : innerBorderColor;
-            // ctx.lineWidth = innerBorderWidth;
-            // ctx.beginPath();
-            // ctx.arc(
-            //   centerX,
-            //   centerY,
-            //   insideRadius + ctx.lineWidth / 2 - 1,
-            //   0,
-            //   2 * Math.PI
-            // );
-            // ctx.closePath();
-            // ctx.stroke();
             // CONTENT FILL
             ctx.translate(centerX + Math.cos(startAngle + arc / 2) * contentRadius, centerY + Math.sin(startAngle + arc / 2) * contentRadius);
             var contentRotationAngle = startAngle + arc / 2;
