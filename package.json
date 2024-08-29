@@ -1,6 +1,6 @@
 {
     "name": "spin_and_wheel",
-    "version": "1.0.8",
+    "version": "1.0.10",
     "description": "Thang enhance package spin",
     "main": "./dist/bundle.js",
     "repository": {
