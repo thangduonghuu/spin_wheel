@@ -43,12 +43,10 @@
     transform: rotate(${e=>e.startRotationDegrees}deg);
 
     &.started-spinning {
-        animation: spin-${({classKey:e})=>e} ${({startSpinningTime:e})=>e/1e3}s cubic-bezier(
-                    0.71,
+        animation: spin-${({classKey:e})=>e} ${({startSpinningTime:e})=>e/1e3}s cubic-bezier(0.71,
                     ${e=>e.disableInitialAnimation?0:-.29},
                     0.96,
-                    0.9
-                ) 0s 1 normal forwards running,
+                    0.9) 0s 1 normal forwards running,
             continueSpin-${({classKey:e})=>e} ${({continueSpinningTime:e})=>e/1e3}s linear ${({startSpinningTime:e})=>e/1e3}s 1 normal forwards running,
             stopSpin-${({classKey:e})=>e} ${({stopSpinningTime:e})=>e/1e3}s cubic-bezier(0, 0, 0.35, 1.02) ${({startSpinningTime:e,continueSpinningTime:t})=>(e+t)/1e3}s 1 normal forwards running;
     }

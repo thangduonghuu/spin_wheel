@@ -1,6 +1,6 @@
 {
     "name": "spin_and_wheel",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "description": "Thang enhance package spin",
     "main": "./dist/bundle.js",
     "repository": {
@@ -59,11 +59,6 @@
         "format": "prettier --write src/**/*.{js,ts,tsx}",
         "lint": "eslint src/**/*.{js,ts,tsx}",
         "link-react": "cd example/node_modules/react && yarn link && cd ../react-dom && yarn link && cd ../../.. && yarn link react react-dom"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "yarn format && yarn lint"
-        }
     },
     "jest": {
         "coveragePathIgnorePatterns": [
